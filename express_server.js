@@ -14,10 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   res.send("<html><body>Hello <b> World </b></body></html>\n");
 // });
 
-app.get("/", (req, res) => {
-  res.send("<html><h");
-});
-
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
@@ -40,9 +36,15 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(302, longURL);
+});
+
 app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("Ok");
+  let shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  res.redirect(302, `/urls/${shortURL}`);
 });
 
 app.listen(PORT, () => {
@@ -108,4 +110,5 @@ let generateRandomString = () => {
   for (let i = 0; i < 7; i++) {
     strRandom += alph.join("").charAt(Math.floor(Math.random() * alph.length));
   }
+  return strRandom;
 };

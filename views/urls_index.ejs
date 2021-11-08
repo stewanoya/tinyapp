@@ -17,7 +17,10 @@
     <div>
       <ul>
         <% for (url in urls) { %>
-        <li><%= urls[url] %> <span>is shortened to:</span> <%= url %></li>
+        <li>
+          <%= urls[url] %> <span>is shortened to:</span>
+          <a href="/urls/<%= url %>"><%= url %></a>
+        </li>
         <% } %>
       </ul>
     </div>

@@ -21,7 +21,6 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
-  console.log(templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -49,6 +48,11 @@ app.post("/urls", (req, res) => {
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
+  res.redirect(302, `/urls`);
+});
+
+app.post("/urls/:shortURL/edit", (req, res) => {
+  urlDatabase[req.params.shortURL] = req.body.longURL;
   res.redirect(302, `/urls`);
 });
 

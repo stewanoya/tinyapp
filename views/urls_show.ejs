@@ -13,20 +13,18 @@
 
     <title>URL - TinyApp</title>
   </head>
-  <body>
+  <body class="p-3 mb-2 bg-success text-black">
     <%- include('partials/_header') %>
-    <div class="card text-center">
-      <div class="card-header"></div>
-      <div class="card-body">
+    <div class="text-center">
+      <div class="card-body shadow p-3 mb-5 bg-white rounded"">
         <h5 class="card-title">
-          TinyURL for: <a href="<%= longURL %>"><%= longURL %></a>
+          TinyApp URL for: <a href="<% longURL %>"><%= longURL %></a>
         </h5>
         <p class="card-text">
           Short URL:
           <a href="/u/<%= shortURL %>">localhost:8080/urls/<%= shortURL %> </a>
         </p>
       </div>
-      <div class="card-footer text-muted"></div>
     </div>
   </body>
 </html>

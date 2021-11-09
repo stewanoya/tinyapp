@@ -12,23 +12,32 @@
     />
     <title>TinyApp</title>
   </head>
-  <body>
+  <body class="p-3 mb-2 bg-success text-black">
     <%- include('partials/_header') %>
-    <h1>My URLS</h1>
+    <h1 class="text-center">My URLS</h1>
     <div>
-      <ul>
+      <ul class="list-group text-center">
         <% for (url in urls) { %>
-        <li>
-          <%= urls[url] %> <span>is shortened to:</span>
-          <a href="/urls/<%= url %>"><%= url %></a>
+        <li class="list-group-item">
+          <strong> <%= urls[url] %></strong>
+          <span class="">has been shortened to -> </span>
+          <strong><%= url %></strong>
+          <a href="/urls/<%= url %>">
+            <button class="btn-secondary">Details</button>
+          </a>
+          <form method="POST" action="/urls/<%= url %>/delete" class="d-inline">
+            <button>Delete</button>
+          </form>
         </li>
         <% } %>
       </ul>
     </div>
 
     <div>
-      <h2>Want to shorten another link?</h2>
-      <a href="/urls/new">Click here</ahref=>
+      <h2 class="text-center d-block">Want to shorten another link?</h2>
+      <a href="http://localhost:8080/urls/new">
+        <button class="btn-primary">Click here</button></a
+      >
     </div>
 
     <script

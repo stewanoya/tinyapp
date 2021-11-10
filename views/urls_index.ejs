@@ -16,29 +16,31 @@
     <%- include('partials/_header') %>
     <h1 class="text-center">My URLS</h1>
     <div>
-      <ul class="list-group text-center">
+      <ul class="list-group text-center shadow">
         <% for (url in urls) { %>
         <li class="list-group-item">
           <strong> <%= urls[url] %></strong>
           <span class="">has been shortened to -> </span>
           <strong><%= url %></strong>
           <a href="/urls/<%= url %>">
-            <button class="btn-secondary">Details</button>
+            <button class="btn-secondary rounded">Details</button>
           </a>
           <form method="POST" action="/urls/<%= url %>/delete" class="d-inline">
-            <button>Delete</button>
+            <button class="rounded">Delete</button>
           </form>
         </li>
         <% } %>
       </ul>
     </div>
 
-    <div class="">
-      <h2 class="text-center d-block">Want to shorten another link?</h2>
-      <a href="http://localhost:8080/urls/new">
-        <button class="btn-primary d-block mx-auto">Click here</button></a
-      >
-    </div>
+    <div class=>
+    <h2 class="text-center d-block">Want to shorten another link?</h2>
+    <button
+      href="http://localhost:8080/urls/new"
+      class="btn-primary m-1 d-block mx-auto rounded"
+    >
+      Click here
+    </button>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

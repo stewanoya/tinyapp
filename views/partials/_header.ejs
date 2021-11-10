@@ -22,19 +22,10 @@
       <% if (!user) { %>
       <form method="POST" action="/login" class="d-flex align-items-center">
         <a href="/register" class="nav-item nav-link text-white">Register</a>
-        <button type="submit" class="btn-primary d-inline px-4 py-1 rounded">
-          Login
-        </button>
-        <input
-          class="form-control"
-          type="text"
-          name="username"
-          placeholder="username"
-          style="width: 200px; margin: 1em"
-        />
+        <a href="/login" class="text-white btn btn-info"> Login </a>
       </form>
       <% } else { %>
-      <div class="card px-4 py-2 d-inline">Welcome, <%= user %></div>
+      <div class="card px-4 py-2 d-inline">Welcome, <%= user.email %></div>
       <form method="POST" action="/logout" class="d-inline">
         <button class="d-inline py-1 rounded" type="submit">Logout</button>
       </form>

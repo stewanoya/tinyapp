@@ -27,7 +27,6 @@ const users = {
 ////////////////////////////////////
 
 const bodyParser = require("body-parser");
-const e = require("express");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -37,13 +36,17 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const user = req.cookies["user_id"];
-  const templateVars = { urls: urlDatabase, user };
+  const templateVars = { urls: urlDatabase, user: users[user] };
   res.render("urls_index", templateVars);
+});
+
+app.get("/login", (req, res) => {
+  res.render("urls_login");
 });
 
 app.get("/urls/new", (req, res) => {
   const user = req.cookies["user_id"];
-  const templateVars = { user };
+  const templateVars = { user: users[user] };
   res.render("urls_new", templateVars);
 });
 
@@ -52,7 +55,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    user,
+    user: users[user],
   };
   res.render("urls_show", templateVars);
 });
@@ -91,14 +94,23 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  let username = req.body.username;
-  res.cookie("username", username);
-  res.redirect(302, "/urls");
+  const emailCheck = emailLookup(req.body.email);
+  const passCheck = passwordLookup(req.body.password);
+
+  if (emailCheck && passCheck) {
+    res.cookie("user_id", emailCheck["id"]);
+    res.redirect(302, "/urls");
+  } else {
+    res.status(403);
+    res.send(
+      "Your email or password was incorrect, please go back and try again."
+    );
+  }
 });
 
 app.post("/register", (req, res) => {
   let userid = generateRandomString();
-  if (!emailLookup(req.body.email)) {
+  if (emailLookup(req.body.email)) {
     res.status(400);
     res.send("Email is taken, please go back and try again.");
   } else if (!req.body.email || !req.body.password) {
@@ -107,13 +119,14 @@ app.post("/register", (req, res) => {
       "email or password cannot be blank, please go back and try again."
     );
   } else {
+    res.cookie("user_id", userid);
+
     users[userid] = {
       id: userid,
       email: req.body.email,
       password: req.body.password,
     };
   }
-  res.cookie("user_id", userid);
   res.redirect(302, "/urls");
 });
 
@@ -124,10 +137,19 @@ app.listen(PORT, () => {
 const emailLookup = (email) => {
   for (user in users) {
     if (users[user].email === email) {
-      return false;
+      return users[user];
     }
   }
-  return true;
+  return false;
+};
+
+const passwordLookup = (password) => {
+  for (user in users) {
+    if (users[user].password === password) {
+      return users[user];
+    }
+  }
+  return false;
 };
 
 const generateRandomString = () => {

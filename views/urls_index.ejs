@@ -17,19 +17,20 @@
     <h1 class="text-center">My URLS</h1>
     <div class="justify-content-between d-block">
       <ul class="list-group text-center shadow">
-        <% for (url in urls) { %>
+        <% for (key in urls) { %> <% if (urls[key]["userID"] === user['id']) {
+        %>
         <li class="list-group-item">
-          <strong> <%= urls[url] %></strong>
+          <strong> <%= urls[key]["longURL"] %></strong>
           <span class="">has been shortened to -> </span>
-          <strong><%= url %></strong>
-          <a href="/urls/<%= url %>">
+          <strong><%= key %></strong>
+          <a href="/urls/<%= key %>">
             <button class="btn btn-secondary rounded">Details</button>
           </a>
-          <form method="POST" action="/urls/<%= url %>/delete" class="d-inline">
+          <form method="POST" action="/urls/<%= key %>/delete" class="d-inline">
             <button class="rounded btn btn-danger">Delete</button>
           </form>
         </li>
-        <% } %>
+        <% }%> <% } %>
       </ul>
     </div>
     <div class="card my-5 py-2 w-50 mx-auto shadow">

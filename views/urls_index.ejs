@@ -15,7 +15,7 @@
   <body class="p-3 mb-2 bg-success text-black position-relative">
     <%- include('partials/_header') %>
     <h1 class="text-center">My URLS</h1>
-    <div>
+    <div class="justify-content-between d-block">
       <ul class="list-group text-center shadow">
         <% for (url in urls) { %>
         <li class="list-group-item">
@@ -23,25 +23,21 @@
           <span class="">has been shortened to -> </span>
           <strong><%= url %></strong>
           <a href="/urls/<%= url %>">
-            <button class="btn-secondary rounded">Details</button>
+            <button class="btn btn-secondary rounded">Details</button>
           </a>
           <form method="POST" action="/urls/<%= url %>/delete" class="d-inline">
-            <button class="rounded">Delete</button>
+            <button class="rounded btn btn-danger">Delete</button>
           </form>
         </li>
         <% } %>
       </ul>
     </div>
-
-    <div class=>
-    <h2 class="text-center d-block">Want to shorten another link?</h2>
-    <button
-      href="http://localhost:8080/urls/new"
-      class="btn-primary m-1 d-block mx-auto rounded"
-    >
-      Click here
-    </button>
-
+    <div class="card my-5 py-2 w-50 mx-auto shadow">
+      <h2 class="text-center d-block">Want to shorten another link?</h2>
+      <a class="btn btn-primary mx-auto" href="http://localhost:8080/urls/new"
+        >Click here</a
+      >
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

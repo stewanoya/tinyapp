@@ -34,8 +34,8 @@
       </form>
       <% } else {%>
       <div class="card px-4 py-2 d-inline">Welcome, <%= username %></div>
-      <form method="GET" action="/logout" class="d-inline">
-        <button class="d-inline py-1 rounded">Logout</button>
+      <form method="POST" action="/logout" class="d-inline">
+        <button class="d-inline py-1 rounded" type="submit">Logout</button>
       </form>
       <% } %>
     </div>

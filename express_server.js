@@ -27,6 +27,7 @@ const users = {
 ////////////////////////////////////
 
 const bodyParser = require("body-parser");
+const e = require("express");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -37,7 +38,6 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   const user = req.cookies["user_id"];
   const templateVars = { urls: urlDatabase, user };
-  console.log(templateVars);
   res.render("urls_index", templateVars);
 });
 
@@ -98,11 +98,21 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   let userid = generateRandomString();
-  users[userid] = {
-    id: userid,
-    email: req.body.email,
-    password: req.body.password,
-  };
+  if (!emailLookup(req.body.email)) {
+    res.status(400);
+    res.send("Email is taken, please go back and try again.");
+  } else if (!req.body.email || !req.body.password) {
+    res.status(400);
+    res.send(
+      "email or password cannot be blank, please go back and try again."
+    );
+  } else {
+    users[userid] = {
+      id: userid,
+      email: req.body.email,
+      password: req.body.password,
+    };
+  }
   res.cookie("user_id", userid);
   res.redirect(302, "/urls");
 });
@@ -111,7 +121,16 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-let generateRandomString = () => {
+const emailLookup = (email) => {
+  for (user in users) {
+    if (users[user].email === email) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const generateRandomString = () => {
   let strRandom = "";
   let alph = [
     "a",

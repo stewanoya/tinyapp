@@ -4,7 +4,11 @@ const PORT = 8080;
 var cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 app.set("view engine", "ejs");
-const { emailLookup, passwordLookup } = require("./helpers/userHelpers");
+const {
+  emailLookup,
+  passwordLookup,
+  generateRandomString,
+} = require("./helpers/userHelpers");
 
 //////URL DATABASE//////////////////
 const urlDatabase = {
@@ -76,7 +80,10 @@ app.get("/login", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   if (!req.session["user_id"]) {
-    res.status(403).redirect("/register");
+    res
+      .status(403)
+      .send("Register for an account to create your own urls!")
+      .redirect("/register");
   }
   const user = req.session["user_id"];
   const templateVars = { user: users[user] };
@@ -100,30 +107,30 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const user = req.session["user_id"];
-  const templateVars = {
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL]["longURL"],
-    user: users[user],
-  };
-  res.redirect(302, templateVars["longURL"]);
+  if (!urlDatabase[req.params.shortURL]) {
+    res.render("urls_exist");
+  } else {
+    res.redirect(302, urlDatabase[req.params.shortURL]["longURL"]);
+  }
 });
 
 app.get("/register", (req, res) => {
   const user = req.session["user_id"];
+  if (user) {
+    res.redirect("/urls");
+  }
   const templateVars = { urls: urlDatabase, user: users[user] };
   res.render("urls_register", templateVars);
 });
 
 app.post("/logout", (req, res) => {
-  let user = req.session["user_id"];
   //deletes cookie after signing out
   req.session = null;
   res.redirect(302, `/login`);
 });
 
 app.post("/urls", (req, res) => {
-  let shortURL = generateRandomString();
+  const shortURL = generateRandomString();
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
     userID: req.session["user_id"],
@@ -132,12 +139,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  let user = req.session["user_id"];
-  console.log("Here is my user", user);
-  console.log(
-    "here is what I want to compare it to",
-    urlDatabase[req.params.shortURL]["userID"]
-  );
+  const user = req.session["user_id"];
   //conditional check to see if person is signed in and to make sure id of url
   //match id of user before deleting
   if (!user) {
@@ -153,6 +155,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL/edit", (req, res) => {
+  const user = req.session["user_id"];
+  if (!user) {
+    res.redirect(403, "/login");
+  }
   // editing the longurl to whatever is put into form
   urlDatabase[req.params.shortURL]["longURL"] = req.body["longURL"];
 
@@ -205,65 +211,3 @@ app.post("/register", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-const generateRandomString = () => {
-  let strRandom = "";
-  let alph = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
-  for (let i = 0; i < 7; i++) {
-    strRandom += alph.join("").charAt(Math.floor(Math.random() * alph.length));
-  }
-  return strRandom;
-};

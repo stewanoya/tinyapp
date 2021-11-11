@@ -14,25 +14,28 @@
   </head>
   <body class="p-3 mb-2 bg-success text-black">
     <%- include('partials/_header') %>
-    <main style="margin: 1em">
-      <div class="card shadow">
-        <h3 class="p-3">Create TinyURL</h3>
-        <form class="form-inline p-3" action="/urls" method="POST">
-          <div class="form-group mb-2">
-            <label for="longURL">Enter a URL:</label>
-            <input
-              class="form-control"
-              type="text"
-              name="longURL"
-              placeholder="type or paste your link here"
-              style="width: 300px; margin: 1em"
-              value="http://"
-            />
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
-      </div>
-    </main>
+    <div class="card shadow">
+      <h3 class="p-3 text-center">Create TinyURL</h3>
+      <form
+        class="form-inline p-3 d-block mx-auto"
+        action="/urls"
+        method="POST"
+      >
+        <div class="form-group mb-2">
+          <label for="longURL">Enter any valid URL:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="longURL"
+            placeholder="type or paste your link here"
+            style="width: 300px; margin: 1em"
+            value="http://"
+          />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

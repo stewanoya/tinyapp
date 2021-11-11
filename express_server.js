@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 app.set("view engine", "ejs");
 
 //////URL DATABASE//////////////////
@@ -46,7 +47,11 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("tinyappHome");
+  const user = req.cookies["user_id"];
+  if (!user) {
+    res.redirect(302, "/login");
+  }
+  res.redirect(302, "/urls");
 });
 
 app.get("/urls", (req, res) => {
@@ -59,7 +64,12 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("urls_login");
+  const user = req.cookies["user_id"];
+  const templateVars = { user };
+  if (!templateVars[user]) {
+    templateVars[user] = null;
+  }
+  res.render("urls_login", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
@@ -107,7 +117,7 @@ app.post("/logout", (req, res) => {
   let user = req.cookies["user_id"];
   //deletes cookie after signing out
   res.clearCookie("user_id", user);
-  res.redirect(302, `/urls`);
+  res.redirect(302, `/login`);
 });
 
 app.post("/urls", (req, res) => {
@@ -162,6 +172,7 @@ app.post("/login", (req, res) => {
       "Your email or password was incorrect, please go back and try again."
     );
   }
+  console.log("check to see if password is hashed", users);
 });
 
 app.post("/register", (req, res) => {
@@ -183,7 +194,7 @@ app.post("/register", (req, res) => {
     users[userid] = {
       id: userid,
       email: req.body.email,
-      password: req.body.password,
+      password: bcrypt.hashSync(req.body.password, 10),
     };
   }
   res.redirect(302, "/urls");
@@ -204,7 +215,7 @@ const emailLookup = (email) => {
 
 const passwordLookup = (password) => {
   for (user in users) {
-    if (users[user].password === password) {
+    if (bcrypt.compareSync(password, users[user].password)) {
       return users[user];
     }
   }

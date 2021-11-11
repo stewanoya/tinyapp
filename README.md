@@ -3,7 +3,7 @@
 ## Final Product
 
 1. ![Screenshot of Login Page](https://github.com/stewanoya/tinyapp/blob/master/docs/login.png)
-2. ![Screenshot of URLS Page](https://github.com/stewanoya/tinyapp/blob/master/docs/urls-page)
+2. ![Screenshot of URLS Page](https://github.com/stewanoya/tinyapp/blob/master/docs/urls-page.png)
 3. ![Screenshot of creating new URL](https://github.com/stewanoya/tinyapp/blob/master/docs/new-url.png)
 4. ![Screenshot of Edit URL Page](https://github.com/stewanoya/tinyapp/blob/master/docs/edit-url.png)
 

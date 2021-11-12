@@ -17,8 +17,8 @@
     <h1 class="text-center">My URLS</h1>
     <div class="justify-content-between d-block">
       <ul class="list-group text-center shadow">
-        <% for (key in urls) { %> <% if (urls[key]["userID"] === user['id']) {
-        %>
+        <% for (const key in urls) { %> <% if (urls[key]["userID"] ===
+        user['id']) { %>
         <li class="list-group-item">
           <strong><%= key %></strong>
           <a href="/urls/<%= key %>">

@@ -63,7 +63,11 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   const user = req.session["user_id"];
   if (!user) {
-    res.redirect("/");
+    res
+      .status(403)
+      .send(
+        "Only signed in accounts can view this page! Please go back and register or sign in."
+      );
   }
   const templateVars = { urls: urlDatabase, user: users[user] };
   res.render("urls_index", templateVars);
@@ -80,10 +84,7 @@ app.get("/login", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   if (!req.session["user_id"]) {
-    res
-      .status(403)
-      .send("Register for an account to create your own urls!")
-      .redirect("/register");
+    res.redirect("/login");
   }
   const user = req.session["user_id"];
   const templateVars = { user: users[user] };
@@ -92,10 +93,14 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const user = req.session["user_id"];
-  if (!user) {
-    res.redirect("/login");
+  console.log("HERE IS REQ:", req.params);
+
+  if (!Object.keys(urlDatabase).includes(req.params["shortURL"])) {
+    res.status(403).send("Sorry, this URL doesn't exist.");
+  } else if (!user) {
+    res.status(403).send("Please go back and sign in or register.");
   } else if (urlDatabase[req.params.shortURL]["userID"] !== user) {
-    res.redirect("/login");
+    res.status(403).send("Hey, that's not yours!");
   } else {
     const templateVars = {
       shortURL: req.params.shortURL,

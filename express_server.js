@@ -93,7 +93,6 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const user = req.session["user_id"];
-  console.log("HERE IS REQ:", req.params);
 
   if (!Object.keys(urlDatabase).includes(req.params["shortURL"])) {
     res.status(403).send("Sorry, this URL doesn't exist.");
@@ -185,7 +184,6 @@ app.post("/login", (req, res) => {
       "Your email or password was incorrect, please go back and try again."
     );
   }
-  console.log("check to see if password is hashed", users);
 });
 
 app.post("/register", (req, res) => {

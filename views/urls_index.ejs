@@ -20,9 +20,11 @@
         <% for (const key in urls) { %> <% if (urls[key]["userID"] ===
         user['id']) { %>
         <li class="list-group-item">
+          <strong> Long URL: <%= urls[key]["longURL"] %></strong>
+          <span class="">to Short URL:</span>
           <strong><%= key %></strong>
           <a href="/urls/<%= key %>">
-            <button class="btn btn-secondary rounded">Details</button>
+            <button class="btn btn-secondary rounded">Edit</button>
           </a>
           <form method="POST" action="/urls/<%= key %>/delete" class="d-inline">
             <button class="rounded btn btn-danger">Delete</button>
